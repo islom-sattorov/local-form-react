@@ -21,7 +21,6 @@ const Form = () => {
     })
 
     const [arr, setArr] = useState([])
-
     const [storedList, setStoredList] = useState([]);
 
 
@@ -31,19 +30,17 @@ const Form = () => {
         // console.log(e.target.value)
     }
     // console.log(formData)
-    // let newUser = window.localStorage.getItem(`User0`)
-    // setStoredList(JSON.parse(newUser))
+    let newUser = window.localStorage.getItem(`User${window.localStorage.length - 1}`)
+    let newUserJson = JSON.parse(newUser);
+    // setStoredList([newUserJson])
     // console.log(newUser)
 
-    const addToStorage = () => {
+    const addToStorage = (e) => {
         setArr([formData])
         // setStoredList(JSON.parse(localStorage.getItem(`User${window.localStorage.length}`)))
         // setStoredList(JSON.parse(newUser))
-
-        console.log(storedList);
+        // console.log(storedList);
     }
-    // window.localStorage.setItem('First Name', arr[0].firstName)
-    // window.localStorage.clear();
 
     const clearLocalStorage = () => {
         window.localStorage.clear();
@@ -52,8 +49,6 @@ const Form = () => {
 
     useEffect(() => {
         localStorage.setItem(`User${window.localStorage.length}`, JSON.stringify(arr))
-        console.log(window.localStorage.length)
-
     }, [arr])
 
 
@@ -65,10 +60,6 @@ const Form = () => {
     // window.localStorage.setItem('name', 'islom'); // Set a value name:islom
     // window.localStorage.removeItem('name'); // Remove item by the key name
     // window.localStorage.clear(); // invoke clear delete all items inside localStorage
-
-    // console.log(storLeng)
-    // console.log(storKey)
-    // console.log(storGetItem)
 
 
 
@@ -87,16 +78,18 @@ const Form = () => {
             <button className='btn'>Reset</button>
             <button onClick={clearLocalStorage} className='btn'>Clear local Storage</button>
             <div>
-                {/* {window.localStorage.getItem('User0')
+                {window.localStorage.getItem('User0')
                     ? <>
-                        <h2>{storedList[0].firstName}</h2>
-                        <h3>{storedList[0].lastName}</h3>
-                        <p>{storedList[0].location}</p>
-                        <p>{storedList[0].age}</p>
-                        <p>{storedList[0].email}</p>
-                        <p>{storedList[0].number}</p>
+                        <div className='cardJson'>
+                            <h3>{newUserJson[0].firstName}</h3>
+                            <h3>{newUserJson[0].lastName}</h3>
+                            <p>{newUserJson[0].location}</p>
+                            <p>{newUserJson[0].age}</p>
+                            <p>{newUserJson[0].email}</p>
+                            <p>{newUserJson[0].number}</p>
+                        </div>
                     </>
-                    : 'Cannot found any data in the localStorage '} */}
+                    : 'Cannot found any data in the localStorage '}
             </div>
         </>
     )
