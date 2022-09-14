@@ -1,58 +1,100 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 
-// const clearObj = {
-//     firstName: '',
-//     lastName: '',
-//     location: '',
-//     age: '',
-//     email: '',
-//     number: '',
-// }
+const initialState = {
+    fName: '',
+    lName: '',
+    age: 0,
+    location: '',
+    email: '',
+    number: '',
+}
 
 
 const Form = () => {
-    const [formData, setFormData] = useState({
-        firstName: { name },
-        lastName: { name },
-        location: { name },
-        age: { name },
-        email: { name },
-        number: { name }
-    })
-
-    const [arr, setArr] = useState([])
-    const [storedList, setStoredList] = useState([]);
+    const [formData, setFormData] = useState(initialState);
+    const { fName, lName, age, location, email, number } = formData;
+    const [objects, setObjects] = useState(JSON.parse(localStorage.getItem('user-data')));
 
 
 
     const handleChange = (e) => {
         setFormData({ ...formData, [e.target.name]: e.target.value })
-        // console.log(e.target.value)
     }
-    // console.log(formData)
-    let newUser = window.localStorage.getItem(`User${window.localStorage.length - 1}`)
-    let newUserJson = JSON.parse(newUser);
-    // setStoredList([newUserJson])
-    // console.log(newUser)
 
-    const addToStorage = (e) => {
-        setArr([formData])
-        // setStoredList(JSON.parse(localStorage.getItem(`User${window.localStorage.length}`)))
-        // setStoredList(JSON.parse(newUser))
-        // console.log(storedList);
+    const handleSubmit = (e) => {
+        e.preventDefault();
+
+        let localObj = {
+            id: Date.now(),
+            fName,
+            lName,
+            age: +age,
+            location,
+            email,
+            number,
+        }
+
+        if (localStorage.getItem('users-values')) {
+            let localStorageValue = JSON.parse(localStorage.getItem('users-values'));
+
+            localStorageValue.push(localObj);
+
+            localStorage.setItem('users-values', JSON.stringify(localStorageValue));
+            setObjects(localStorageValue)
+            return;
+        } else {
+
+            localStorage.setItem('users-values', JSON.stringify([localObj]));
+            setObjects([localObj])
+            return;
+        }
     }
+
 
     const clearLocalStorage = () => {
-        window.localStorage.clear();
+        localStorage.clear();
     }
 
 
-    useEffect(() => {
-        localStorage.setItem(`User${window.localStorage.length}`, JSON.stringify(arr))
-    }, [arr])
+    return (
+        <>
+            <h2>Registration Form</h2>
+            <form onSubmit={handleSubmit}>
+                <input type='text' name='fName' value={fName} placeholder='First name' onChange={handleChange} />
+                <input type='text' name='lName' value={lName} placeholder='Last name' onChange={handleChange} />
+                <input type='text' name='location' value={location} placeholder='Location' onChange={handleChange} />
+                <input type='number' name='age' value={age} placeholder='Age' onChange={handleChange} />
+                <input type='email' name='email' value={email} placeholder='Email' onChange={handleChange} />
+                <input type='text' name='number' value={number} placeholder='Number' onChange={handleChange} />
+                <button type='submit' disabled={!fName || !lName || !age} className='btn'>Submit</button>
+            </form>
+            <button className='btn'
+                onClick={() => setFormData(initialState)}
+            >Reset</button>
+            <button onClick={clearLocalStorage} className='btn'>Clear local Storage</button>
+            {objects &&
+                <div className='item-container'>
+                    {objects.map((item, idx) =>
+                        <div className='item' key={item.id}>
+                            <p className='id'>{idx}</p>
+                            <h2>{item.fName}</h2>
+                            <h2>{item.lName}</h2>
+                            <h3>{item.age}</h3>
+                            <p>{item.location}</p>
+                            <p>{item.email}</p>
+                            <p>{item.number}</p>
+                        </div>
+                    )}
+                </div>
+            }
+        </>
+
+    )
+
+}
 
 
-
+export default Form
 
     // let storLeng = window.localStorage.length
     // let storKey = window.localStorage.key(0) // Return key of index 0
@@ -61,38 +103,3 @@ const Form = () => {
     // window.localStorage.removeItem('name'); // Remove item by the key name
     // window.localStorage.clear(); // invoke clear delete all items inside localStorage
 
-
-
-    return (
-        <>
-            <h2>Registration Form</h2>
-            <form>
-                <input type='text' name='firstName' placeholder='First name' onChange={handleChange} />
-                <input type='text' name='lastName' placeholder='Last name' onChange={handleChange} />
-                <input type='text' name='location' placeholder='Location' onChange={handleChange} />
-                <input type='text' name='age' placeholder='Age' onChange={handleChange} />
-                <input type='email' name='email' placeholder='Email' onChange={handleChange} />
-                <input type='text' name='number' placeholder='Number' onChange={handleChange} />
-            </form>
-            <button onClick={addToStorage} type='submit' className='btn'>Submit</button>
-            <button className='btn'>Reset</button>
-            <button onClick={clearLocalStorage} className='btn'>Clear local Storage</button>
-            <div>
-                {window.localStorage.getItem('User0')
-                    ? <>
-                        <div className='cardJson'>
-                            <h3>{newUserJson[0].firstName}</h3>
-                            <h3>{newUserJson[0].lastName}</h3>
-                            <p>{newUserJson[0].location}</p>
-                            <p>{newUserJson[0].age}</p>
-                            <p>{newUserJson[0].email}</p>
-                            <p>{newUserJson[0].number}</p>
-                        </div>
-                    </>
-                    : 'Cannot found any data in the localStorage '}
-            </div>
-        </>
-    )
-}
-
-export default Form
