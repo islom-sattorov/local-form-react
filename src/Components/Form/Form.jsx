@@ -48,6 +48,8 @@ const Form = () => {
             setObjects([localObj])
             return;
         }
+
+
     }
 
 
@@ -78,6 +80,9 @@ const Form = () => {
                     {objects.map((item, idx) =>
                         <div className='item' key={item.id}>
                             <CardContent>
+                                <Button sx={{ fontSize: 15 }} variant='contained' size='small' color='error' className='deleteBtn' onClick={() => {
+                                    setObjects(objects.slice(0, idx).concat(objects.slice(idx + 1)))
+                                }}>X</Button>
                                 <Typography sx={{ fontSize: 30 }} color="text.main" gutterBottom>
                                     {item.fName} {item.lName}
                                 </Typography>

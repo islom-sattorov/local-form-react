@@ -63,16 +63,23 @@ form input{
 
 .item-container{
     display: grid;
-    grid-template-columns: repeat(3,1fr);
+    grid-template-columns: repeat(5,1fr);
     justify-content: center;
     align-items: center;
     margin: 0 auto;
-    border: 1px dotted red;
 }
 
 .item{
     display: flex;
     flex-direction: column;
-    border: 1px solid red;
+    border: 2px solid red;
+    border-radius: 10px;
+    width: 300px;
+    margin: 10px 10px;
     align-items: center;
+}
+
+.deleteBtn{
+    position: absolute;
+    left: 140px;
 }
