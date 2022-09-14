@@ -1,3 +1,4 @@
+import { Button, CardActions, CardContent, TextField, Typography } from '@mui/material';
 import React, { useState } from 'react';
 
 const initialState = {
@@ -13,7 +14,7 @@ const initialState = {
 const Form = () => {
     const [formData, setFormData] = useState(initialState);
     const { fName, lName, age, location, email, number } = formData;
-    const [objects, setObjects] = useState(JSON.parse(localStorage.getItem('user-data')));
+    const [objects, setObjects] = useState(JSON.parse(localStorage.getItem('users-values')));
 
 
 
@@ -43,7 +44,6 @@ const Form = () => {
             setObjects(localStorageValue)
             return;
         } else {
-
             localStorage.setItem('users-values', JSON.stringify([localObj]));
             setObjects([localObj])
             return;
@@ -60,29 +60,40 @@ const Form = () => {
         <>
             <h2>Registration Form</h2>
             <form onSubmit={handleSubmit}>
-                <input type='text' name='fName' value={fName} placeholder='First name' onChange={handleChange} />
-                <input type='text' name='lName' value={lName} placeholder='Last name' onChange={handleChange} />
-                <input type='text' name='location' value={location} placeholder='Location' onChange={handleChange} />
-                <input type='number' name='age' value={age} placeholder='Age' onChange={handleChange} />
-                <input type='email' name='email' value={email} placeholder='Email' onChange={handleChange} />
-                <input type='text' name='number' value={number} placeholder='Number' onChange={handleChange} />
-                <button type='submit' disabled={!fName || !lName || !age} className='btn'>Submit</button>
+                <TextField sx={{ width: 400 }} id='outlined-basic' label='First Name' variant='outlined' type='text' name='fName' value={fName} placeholder='First name' onChange={handleChange} />
+                <TextField sx={{ width: 400 }} id='outlined-basic' label='Last Name' type='text' name='lName' value={lName} placeholder='Last name' onChange={handleChange} />
+                <TextField sx={{ width: 400 }} id='outlined-basic' label='Location' type='text' name='location' value={location} placeholder='Location' onChange={handleChange} />
+                <TextField sx={{ width: 400 }} id='outlined-number' label='Age' type='number' name='age' value={age} placeholder='Age' onChange={handleChange} />
+                <TextField sx={{ width: 400 }} id='outlined-basic' label='Email' type='email' name='email' value={email} placeholder='Email' onChange={handleChange} />
+                <TextField sx={{ width: 400 }} id='outlined-basic' label='Number Phone' type='text' name='number' value={number} placeholder='Number Phone' onChange={handleChange} />
+                <Button sx={{ width: 400 }} variant='contained' color='success' type='submit' disabled={!fName || !lName || !age} className='btn'>Submit</Button>
             </form>
-            <button className='btn'
-                onClick={() => setFormData(initialState)}
-            >Reset</button>
-            <button onClick={clearLocalStorage} className='btn'>Clear local Storage</button>
+            <div className='btn-container'>
+                <Button sx={{ width: 400 }} variant='contained' className='btn' onClick={() => setFormData(initialState)}
+                >Reset</Button>
+                <Button sx={{ width: 400 }} variant='outlined' color='error' onClick={clearLocalStorage} className='btn'>Clear local Storage</Button>
+            </div>
             {objects &&
                 <div className='item-container'>
                     {objects.map((item, idx) =>
                         <div className='item' key={item.id}>
-                            <p className='id'>{idx}</p>
-                            <h2>{item.fName}</h2>
-                            <h2>{item.lName}</h2>
-                            <h3>{item.age}</h3>
-                            <p>{item.location}</p>
-                            <p>{item.email}</p>
-                            <p>{item.number}</p>
+                            <CardContent>
+                                <Typography sx={{ fontSize: 30 }} color="text.main" gutterBottom>
+                                    {item.fName} {item.lName}
+                                </Typography>
+                                <Typography variant="h5" component="div">
+                                    {item.location}
+                                </Typography>
+                                <Typography sx={{ mb: 1.5 }} color="text.secondary">
+                                    {item.age}
+                                </Typography>
+                                <Typography variant="body4">
+                                    {item.number}
+                                </Typography>
+                            </CardContent>
+                            <CardActions>
+                                <Button size="small">{item.email}</Button>
+                            </CardActions>
                         </div>
                     )}
                 </div>
